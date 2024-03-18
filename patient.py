@@ -39,8 +39,6 @@ def create_patient_resource(patient_id: str, age: int, sex: Literal['m', 'f'], o
                f"In the source system the old id was '{old_id}'.</div>"
     }
 
-    # if the age is in float format (should be actually int)
-    age = int(age)
     # just age given, no real birthdate existent
     patient.birthDate = Date(2010-age, 1, 1)
 
