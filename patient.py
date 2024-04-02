@@ -35,7 +35,7 @@ def create_patient_resource(patient_id: str, age: int, sex: Literal['m', 'f'], o
     patient.text = {
         "status": "generated",
         "div": f"<div xmlns='http://www.w3.org/1999/xhtml'>Birthdate is approximated based on the given age of {age} "
-               f"calculated from a hypothetical data January 1, 2010, due to the original birthdate being unknown. "
+               f"calculated from a hypothetical date January 1, 2010, due to the original birthdate being unknown. "
                f"In the source system the old id was '{old_id}'.</div>"
     }
 
@@ -50,7 +50,7 @@ def create_patient_resource(patient_id: str, age: int, sex: Literal['m', 'f'], o
         raise AttributeError(f'sex needs to be either "m" or "f", but "{sex}" was provided.')
 
     note = Annotation.construct()
-    note.text = ("Birthdate is approximated based on age 51 as of January 1, 2020, due to the original birthdate "
-                 "being unknown.")
+    note.text = (f"Birthdate is approximated based on age {age} calculated from a hypothetical date January 1, 2010, "
+                 f"due to the original birthdate being unknown.")
 
     return patient

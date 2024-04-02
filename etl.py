@@ -43,7 +43,7 @@ def create_bundle(patient_row):
 
     # diagnosis (with subtype)
     subtype = 'Unknown' if pd.isna(patient_row['AMLSTAT']) else patient_row['AMLSTAT']
-    aml_cond_r = create_aml_condition(str(uuid4()), patient_r.id, AML_subtype=subtype)
+    aml_cond_r = create_aml_condition(str(uuid4()), patient_r.id, age=patient_row['AGE'], AML_subtype=subtype)
     bundle_entries.append(BundleEntry(fullUrl='urn:uuid:' + aml_cond_r.id, resource=aml_cond_r))
 
     # CR1 --> condition resource, just if CR1 was achieved

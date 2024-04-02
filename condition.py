@@ -1,3 +1,4 @@
+from fhir.resources.age import Age
 from fhir.resources.annotation import Annotation
 from fhir.resources.codeableconcept import CodeableConcept
 from fhir.resources.coding import Coding
@@ -6,13 +7,14 @@ from fhir.resources.condition import Condition
 from typing import Literal
 
 
-def create_aml_condition(cond_id: str, patient_id: str, AML_subtype: Literal['de novo', 'sAML', 'tAML', 'Unknown']):
+def create_aml_condition(cond_id: str, patient_id: str, age: int, AML_subtype: Literal['de novo', 'sAML', 'tAML', 'Unknown']):
     """
     Creates a FHIR Condition resource for an Acute Myeloid Leukemia (AML) diagnosis with specified subtype.
 
     Parameters:
     - cond_id (str): Unique identifier for the condition.
     - patient_id (str): Identifier for the patient to whom the condition applies.
+    - age (int): Age of the patient when enrolled in the study.
     - AML_subtype (Literal['de novo', 'sAML', 'tAML', 'Unknown']): Subtype of AML diagnosed.
 
     Returns:
@@ -66,6 +68,12 @@ def create_aml_condition(cond_id: str, patient_id: str, AML_subtype: Literal['de
             display="Encounter Diagnosis"
         )]
     )]
+
+    condition.onsetAge = Age.construct(
+        value=int(age),
+        unit="years",
+        system="http://unitsofmeasure.org",
+        code="a")
 
     condition.code = CodeableConcept.construct(
         coding=[Coding.construct(
@@ -134,7 +142,13 @@ def create_cr1_condition(cond_id: str, patient_id: str):
             system="http://snomed.info/sct",
             code="765205004",
             display="Disorder in remission"
-        )],
+        ),
+            Coding.construct(
+                system="http://snomed.info/sct",
+                code="91861009",
+                display="Acute myeloid leukemia"
+            )
+        ],
         text="First Complete Remission (CR1) of Acute Myeloid Leukemia (AML)"
     )
 
