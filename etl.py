@@ -1,7 +1,7 @@
 import os
 from uuid import uuid4
 import pandas as pd
-from fhir.resources.bundle import Bundle, BundleEntry
+from fhir.resources.bundle import Bundle, BundleEntry, BundleEntryRequest
 from condition import create_aml_condition, create_cr1_condition, create_examl_condition
 from observation_genetics import create_karyotype_observation, create_genetic_observation
 from observation_lab import create_observation_lab
@@ -33,7 +33,7 @@ def create_bundle(patient_row):
     event-free survival status and times, karyotype analysis, genetic mutations, and laboratory values. The function ensures that each entry
     in the bundle is assigned a unique UUID and constructs appropriate references between resources.
     """
-    bundle = Bundle.construct(type='collection')
+    bundle = Bundle.construct(type='transaction')
     bundle.id = str(uuid4())
     bundle_entries = []
 
@@ -134,6 +134,9 @@ def create_bundle(patient_row):
 
     left_cols = [col for col in mapping['Variable'] if col not in processed_cols]
     assert len(left_cols) == 0
+
+    for entry in bundle_entries:
+        entry.request = BundleEntryRequest.construct(method='POST', url=entry.resource.resource_type)
 
     bundle.entry = bundle_entries
     return bundle
